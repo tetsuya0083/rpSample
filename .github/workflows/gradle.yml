@@ -54,7 +54,7 @@ jobs:
       run: |
         curl -H "Content-Type: application/json" \
              -X POST \
-             -d '{"content":"✅ GitHub Actions 빌드 성공! 🎉"}' \
+             -d '{"content":"\n ✅ build success \n"}' \
              ${{ secrets.DISCORD_WEBHOOK_URL }}
 
     - name: Notify Discord - Failure
@@ -62,7 +62,8 @@ jobs:
       run: |
         curl -H "Content-Type: application/json" \
              -X POST \
-             -d '{"content":"❌ GitHub Actions 빌드 실패 😢\n확인: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"}' \
+             -d '{"content":"\n ❌ build failed 
+                            😢\n 확인: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"}' \
              ${{ secrets.DISCORD_WEBHOOK_URL }}  
 
   dependency-submission:
