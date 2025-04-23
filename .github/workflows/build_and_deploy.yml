@@ -55,13 +55,14 @@ jobs:
       - name: Trigger EC2 Deploy Script via SSM
         # commands에 사용자를 지정하지 않으면 SSM에서는 Default로 root 계정으로 명령어를 처리한다.
         run: |
-          aws ssm send-command \
+          CMD="aws ssm send-command \
             --document-name "AWS-RunShellScript" \
-            --targets "Key=instanceIds,Values=${{ secrets.EC2_INSTANCE_ID }}" \          
-            --parameters 'commands=["sudo -u ec2-user bash /home/ec2-user/rpSample/deploy.sh"]' \
-            --comment "GitHub Actions deployment" \
+            --targets Key=instanceIds,Values=${{ secrets.EC2_INSTANCE_ID }} \          
+            --parameters '{\"commands\":[\"sudo -u ec2-user bash /home/ec2-user/rpSample/deploy.sh\"]}' \
+            --comment \"GitHub Actions deployment\" \
             --region ${{ secrets.AWS_REGION }} \
-            --output text
+            --output text"
+          eval $CMD
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
