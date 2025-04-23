@@ -2,6 +2,7 @@
 
 cd /home/ec2-user/rpSample || exit 1
 
+git config --global --add safe.directory /home/ec2-user/rpSample
 echo "git pull..."
 git pull origin master
 
