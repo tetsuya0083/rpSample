@@ -1,8 +1,17 @@
 #!/bin/bash
 
+echo "▶️ 현재 사용자: $(whoami)"
+echo "▶️ 현재 홈 디렉토리: $HOME"
+
+if [ "$(whoami)" = "root" ]; then
+  echo "🧭 현재 사용자가 root입니다. ec2-user로 전환하여 deploy.sh 실행합니다."
+
+  sudo -u ec2-user bash -c "/home/ec2-user/rpSample/deploy.sh"
+  exit 0
+fi
+
 cd /home/ec2-user/rpSample || exit 1
 
-git config --global --add safe.directory /home/ec2-user/rpSample
 echo "git pull..."
 git pull origin master
 
