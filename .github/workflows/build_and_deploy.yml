@@ -59,9 +59,9 @@ jobs:
           --document-name AWS-RunShellScript \
           --targets Key=instanceIds,Values=${{ secrets.EC2_INSTANCE_ID }} \
           --parameters '{
-          \"commands\":[
-              \"export DISCORD_WEBHOOK_URL=${{ secrets.DISCORD_WEBHOOK_URL }}\",
-              \"sudo -u ec2-user bash /home/ec2-user/rpSample/deploy.sh\"
+          \"commands\":[              
+              \"sudo -u ec2-user DISCORD_WEBHOOK_URL='${{ secrets.DISCORD_WEBHOOK_URL }}'
+                bash -c \"/home/ec2-user/rpSample/deploy.sh\"\"
             ]
           }' \
           --comment \"GitHub Actions deployment\" \
