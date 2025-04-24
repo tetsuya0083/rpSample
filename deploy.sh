@@ -25,7 +25,7 @@ fi
 chmod 755 "$JAR_PATH"
 chown ec2-user:ec2-user "$JAR_PATH"
 
-PID=$(pgrep -f "java -jar $JAR_PATH")
+PID=$(pgrep -u ec2-user -f "java -jar $JAR_PATH")
 if [ -n "$PID" ]; then
   echo "Stopping existing app (PID: $PID)..."
   kill "$PID"
