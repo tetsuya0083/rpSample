@@ -32,6 +32,9 @@ if [ -n "$PID" ]; then
   sleep 3
 fi
 
+LOG_DIR="/home/ec2-user/weblog"
+LOG_FILE="$LOG_DIR/$(date '+%Y%m%d_%H%M').log"
+
 echo "Starting app..."
-nohup java -jar "$JAR_PATH" > app.log 2>&1 &
+nohup java -jar "$JAR_PATH" > LOG_FILE 2>&1 &
 echo "Deploy complete."
