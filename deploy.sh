@@ -1,11 +1,9 @@
 #!/bin/bash
 
-echo "▶️ 현재 사용자: $(whoami)"
-echo "▶️ 현재 홈 디렉토리: $HOME"
+echo "current user: $(whoami)"
+echo "current home directory: $HOME"
 
 if [ "$(whoami)" = "root" ]; then
-  echo "🧭 현재 사용자가 root입니다. ec2-user로 전환하여 deploy.sh 실행합니다."
-
   sudo -u ec2-user bash -c "/home/ec2-user/rpSample/deploy.sh"
   exit 0
 fi
@@ -37,4 +35,19 @@ LOG_FILE="$LOG_DIR/$(date '+%Y%m%d_%H%M').log"
 
 echo "Starting app..."
 nohup java -jar "$JAR_PATH" > "$LOG_FILE" 2>&1 &
-echo "Deploy complete."
+sleep 10 # 임시 코드, todo 추후 response loop check 방식으로 개선할 예정
+
+RES_CHK_URL="http://localhost:8080"
+HTTP_CODE=$(curl -s -o /dev/null -w "%{http_code}" $RES_CHK_URL)
+
+if [ "$HTTP_CODE" -eq 200 ] || [ "$HTTP_CODE" -eq 404 ]; then
+  MESSAGE="✅ [Deploy Success!] jar: $JAR_PATH log: $LOG_FILE resp: $HTTP_CODE"
+  echo "Deploy Success!"
+else
+  MESSAGE="❌ [Deploy Failed!] jar: $JAR_PATH log: $LOG_FILE resp: $HTTP_CODE"
+  echo "Deploy Failed!"
+fi
+
+JSON="{\"content\": \"$MESSAGE\"}"
+curl -H "Content-Type: application/json" -X POST -d "$JSON" "$DISCORD_WEBHOOK_URL"
+# -H = --header, -X = --request -d = --data
