@@ -49,5 +49,11 @@ else
 fi
 
 JSON="{\"content\": \"$MESSAGE\"}"
-curl -H "Content-Type: application/json" -X POST -d "$JSON" $DISCORD_WEBHOOK_URL
+echo "WebHook URL:'$DISCORD_WEBHOOK_URL'"
+echo "JSON: $JSON"
+curl -H "Content-Type: application/json" -X POST -d "$JSON" "$DISCORD_WEBHOOK_URL"
+curl -X POST \
+     "$DISCORD_WEBHOOK_URL" \
+     -H "Content-Type: application/json" \
+     --data "$JSON"
 # -H = --header, -X = --request -d = --data
